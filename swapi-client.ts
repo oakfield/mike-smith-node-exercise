@@ -28,8 +28,33 @@ export type PersonApiResponse = {
     url: string
 }
 
+export type PlanetApiResponse = {
+    climate: string,
+    created: string,
+    diameter: string,
+    edited: string,
+    films: string[],
+    gravity: string,
+    name: string,
+    orbital_period: string,
+    population: string,
+    residents: string[],
+    rotation_period: string,
+    surface_water: string,
+    terrain: string
+    url: string
+}
+
+export const getPerson = (personUrl: string): Promise<PersonApiResponse> => {
+    return get<PersonApiResponse>(personUrl);
+};
+
 export const getPeoplePage = (pageNumber: number): Promise<Page<PersonApiResponse>> => {
     return get<Page<PersonApiResponse>>(`/api/people/?page=${pageNumber}`);
+};
+
+export const getPlanetPage = (pageNumber: number): Promise<Page<PlanetApiResponse>> => {
+    return get<Page<PlanetApiResponse>>(`/api/planets/?page=${pageNumber}`);
 };
 
 const get = <T>(path: string): Promise<T> => {

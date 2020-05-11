@@ -1,5 +1,6 @@
 import express = require('express');
-import peopleService = require('./people-service');
+import peopleService = require('./person-service');
+import planetService = require('./planet-service');
 
 import PeopleRequest from './people-request';
 
@@ -9,8 +10,8 @@ app.get('/people', async (req: PeopleRequest, res) => {
     res.send(await peopleService.getPeople(req.query.sortBy));
 });
 
-app.get('/planets', (req, res) => {
-    res.send('planets');
+app.get('/planets', async (req, res) => {
+    res.send(await planetService.getPlanets());
 });
 
 app.listen(3000, () => {

@@ -1,4 +1,4 @@
-import { PersonApiResponse, getPeoplePage } from './swapi-client';
+import { PersonApiResponse, getPeoplePage, getPerson as getPersonApiResponse } from './swapi-client';
 
 import _ from 'lodash';
 
@@ -21,6 +21,11 @@ export type Person = {
 }
 
 const MAX_PEOPLE_PAGE_NUMBER = 8;
+
+export let getPerson = async (personUrl: string): Promise<Person> => {
+    return getPersonApiResponse(personUrl)
+        .then(personApiResponse => toPerson(personApiResponse));
+}
 
 export let getPeople = async (personProperty: keyof Person): Promise<Person[]> => {
     let requests = _.range(MAX_PEOPLE_PAGE_NUMBER)
