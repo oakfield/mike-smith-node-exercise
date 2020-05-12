@@ -11,13 +11,12 @@ export let getPlanets = async (): Promise<Planet[]> => {
     let requests = _.range(MAX_PLANET_PAGE_NUMBER)
         .map(getPlanetPage);
 
-    let planetApiResponses = unpage(await Promise.all(requests));
+    let planetPromises = unpage(await Promise.all(requests))
+        .map(async planetApiResponse => {
+            let residents = await getResidents(planetApiResponse);
 
-    let planetPromises = planetApiResponses.map(async planetApiResponse => {
-        let residents = await getResidents(planetApiResponse);
-
-        return { ...planetApiResponse, residents } as Planet;
-    });
+            return { ...planetApiResponse, residents } as Planet;
+        });
 
     return Promise.all(planetPromises);
 };
