@@ -1,18 +1,9 @@
-import express = require('express');
-import peopleService = require('./person-service');
-import planetService = require('./planet-service');
+import api from './src/api';
+import express from 'express';
 
-import PeopleRequest from './people-request';
+let app: express.Application = express();
 
-const app: express.Application = express();
-
-app.get('/people', async (req: PeopleRequest, res) => {
-    res.send(await peopleService.getPeople(req.query.sortBy));
-});
-
-app.get('/planets', async (req, res) => {
-    res.send(await planetService.getPlanets());
-});
+app.use('/', api);
 
 app.listen(3000, () => {
     console.log('Listening on port 3000.')

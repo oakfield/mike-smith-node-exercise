@@ -1,24 +1,8 @@
-import { PersonApiResponse, getPeoplePage, getPerson as getPersonApiResponse } from './swapi-client';
+import { Person, PersonApiResponse } from '../types';
+import { getPeoplePage, getPerson as getPersonApiResponse } from '../clients/swapi-client';
 
 import _ from 'lodash';
-
-export type Person = {
-    height: number,
-    mass: number,
-    hair_color: string,
-    skin_color: string,
-    eye_color: string,
-    birth_year: string,
-    gender: string,
-    homeworld: string,
-    films: string[],
-    species: [],
-    vehicles: string[],
-    starships: string[],
-    created: string,
-    edited: string,
-    url: string
-}
+import { unpage } from './service.util';
 
 const MAX_PEOPLE_PAGE_NUMBER = 8;
 
@@ -30,15 +14,11 @@ export let getPerson = async (personUrl: string): Promise<Person> => {
 export let getPeople = async (personProperty: keyof Person): Promise<Person[]> => {
     let requests = _.range(MAX_PEOPLE_PAGE_NUMBER)
         .map(getPeoplePage);
-
     let personApiResponsePages = await Promise.all(requests);
+    let people = unpage(personApiResponsePages)
+        .map(toPerson);
 
-    return _(personApiResponsePages)
-        .flatMap(page => page.results)
-        .compact()
-        .map(toPerson)
-        .sortBy(personProperty)
-        .value();
+    return _.sortBy(people, personProperty);
 };
 
 let toPerson = (personApiResponse: PersonApiResponse): Person => ({
