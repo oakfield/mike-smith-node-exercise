@@ -4,7 +4,7 @@ import { getPeoplePage, getPerson as getPersonApiResponse } from '../clients/swa
 import _ from 'lodash';
 import { unpage } from './service.util';
 
-const MAX_PEOPLE_PAGE_NUMBER = 8;
+const MAX_PEOPLE_PAGE_NUMBER = 10;
 
 export let getPerson = async (personUrl: string): Promise<Person> => {
     return getPersonApiResponse(personUrl)
@@ -12,7 +12,7 @@ export let getPerson = async (personUrl: string): Promise<Person> => {
 }
 
 export let getPeople = async (personProperty: keyof Person): Promise<Person[]> => {
-    let requests = _.range(MAX_PEOPLE_PAGE_NUMBER)
+    let requests = _.range(1, MAX_PEOPLE_PAGE_NUMBER)
         .map(getPeoplePage);
     let personApiResponsePages = await Promise.all(requests);
     let people = unpage(personApiResponsePages)

@@ -5,10 +5,10 @@ import { getPerson } from './person-service';
 import { getPlanetPage } from '../clients/swapi-client';
 import { unpage } from './service.util';
 
-const MAX_PLANET_PAGE_NUMBER = 10;
+const MAX_PLANET_PAGE_NUMBER = 7;
 
 export let getPlanets = async (): Promise<Planet[]> => {
-    let requests = _.range(MAX_PLANET_PAGE_NUMBER)
+    let requests = _.range(1, MAX_PLANET_PAGE_NUMBER)
         .map(getPlanetPage);
 
     let planetPromises = unpage(await Promise.all(requests))
